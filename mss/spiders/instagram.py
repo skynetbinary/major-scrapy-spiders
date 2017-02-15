@@ -29,15 +29,15 @@ class Instagram(Spider):
         json_data = json.loads("".join(re.findall(r'window._sharedData = (.*);', javascript)))
 
         item = InstagramProfileItems()
-        data = get_extracted(json_data["entry_data"]["UserProfile"])
-        item["is_private"] = data["relationship"]["is_private"]
-        item["posts"] = data["userMedia"]
+        data = get_extracted(json_data["entry_data"]["ProfilePage"])
+        item["is_private"] = data["user"]["is_private"]
         item["username"] = data["user"]["username"]
-        item["bio"] = data["user"]["bio"]
-        item["website"] = data["user"]["website"]
-        item["profile_picture"] = data["user"]["profile_picture"]
         item["full_name"] = data["user"]["full_name"]
-        item["total_posts"] = data["user"]["counts"]["media"]
-        item["followers"] = data["user"]["counts"]["followed_by"]
-        item["following"] = data["user"]["counts"]["follows"]
+        item["bio"] = data["user"]["biography"]
+        item["profile_picture"] = data["user"]["profile_pic_url"]
+        item["website"] = data["user"]["external_url"]
+        item["followers"] = data["user"]["followed_by"]["count"]
+        item["following"] = data["user"]["follows"]["count"]
+        item["posts"] = data["user"]["media"]["nodes"]
+        item["total_posts"] = data["user"]["media"]["count"]
         return item
